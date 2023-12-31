@@ -1,0 +1,27 @@
+body{
+    background-color: rgb(79, 83, 79);
+}
+
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+h1{
+    font-family: 'Moria Citadel';
+    font-size: 3em;
+    border-bottom: 5px solid rgb(42, 46, 42);
+    border-right: 9px solid rgb(42, 46, 42);;
+    color: rgb(61, 168, 61);
+    width: 600px;
+    text-align: center;
+
+}
+
+img{
+    width: 450px;
+    height: 300px;
+    margin: 10px;
+}
