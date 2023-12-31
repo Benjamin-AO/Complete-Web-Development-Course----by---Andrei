@@ -1,0 +1,1 @@
+This is a simple crash course on Boostrap grid.
