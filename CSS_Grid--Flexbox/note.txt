@@ -1,0 +1,6 @@
+General there are no right or wrong layout method to use. CSS grid and flexbox are complimentary to each other.
+
+Basic Rule of Thumb
+
+Flexbox is good to be used if you have one dimensional item. eg. when your layout is basicaly columns
+CSS grids are powerfull when it comes to 2 dimensional layout. eg. when your layout has both columns and rows, such as image galleries or listing out your portfolio projects on your webpage.
