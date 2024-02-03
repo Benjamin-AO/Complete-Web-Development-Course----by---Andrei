@@ -3,7 +3,9 @@ import Card from "./Card";
 
 
 const CardList = ({robots}) => {
-
+    // if (true) {
+    //     throw new Error('Nooooooooo!') //Error testing to check if ErrorBoundary will work as planed.
+    // }
     return (
         <div>
             {
