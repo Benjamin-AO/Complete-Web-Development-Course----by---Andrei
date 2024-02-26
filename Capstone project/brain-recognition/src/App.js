@@ -16,8 +16,30 @@ class App extends Component {
     this.state = {
       input: '',
       imageUrl: '',
+      box: {},
     }
   }
+
+  calculateFaceLocation = (data) => {
+    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById('inputImage');
+    const width = Number(image.width);
+    const height = Number(image.height);
+    console.log(width, height);
+
+    return {
+      leftCol_: clarifaiFace.left_col * width,
+      topRow_: clarifaiFace.top_row * height,
+      rightCol_: width - (clarifaiFace.right_col *  width),
+      bottomRow_: height - (clarifaiFace.bottom_row * height)
+    }
+  }
+
+
+displayFaceBox = (box) => {
+  //console.log(box);
+  this.setState({box: box});
+}
 
   onInputChange = (event) => {
     this.setState({input: event.target.value});
@@ -81,29 +103,28 @@ class App extends Component {
     fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
         .then(response => response.json())
         .then(result => {
+          //console.log(result);
+          this.displayFaceBox(this.calculateFaceLocation(result)); //not part of clarifai; used it to grab result from the model.
+        
+          const regions = result.outputs[0].data.regions;
 
-            console.log(result);
+          regions.forEach(region => {
+              // Accessing and rounding the bounding box values
+              const boundingBox = region.region_info.bounding_box;
+              const topRow = boundingBox.top_row.toFixed(3);
+              const leftCol = boundingBox.left_col.toFixed(3);
+              const bottomRow = boundingBox.bottom_row.toFixed(3);
+              const rightCol = boundingBox.right_col.toFixed(3);
 
-            const regions = result.outputs[0].data.regions;
-             
+              region.data.concepts.forEach(concept => {
+                  // Accessing and rounding the concept value
+                  const name = concept.name;
+                  const value = concept.value.toFixed(4);
 
-            regions.forEach(region => {
-                // Accessing and rounding the bounding box values
-                const boundingBox = region.region_info.bounding_box;
-                const topRow = boundingBox.top_row.toFixed(3);
-                const leftCol = boundingBox.left_col.toFixed(3);
-                const bottomRow = boundingBox.bottom_row.toFixed(3);
-                const rightCol = boundingBox.right_col.toFixed(3);
-
-                region.data.concepts.forEach(concept => {
-                    // Accessing and rounding the concept value
-                    const name = concept.name;
-                    const value = concept.value.toFixed(4);
-
-                    console.log(`${name}: ${value} BBox: ${topRow}, ${leftCol}, ${bottomRow}, ${rightCol}`);
-                    
-                });
-            });
+                  console.log(`${name}: ${value} BBox: ${topRow}, ${leftCol}, ${bottomRow}, ${rightCol}`);
+                  
+              });
+          });
 
         })
         .catch(error => console.log('error', error));
@@ -120,7 +141,7 @@ class App extends Component {
         <Logo />
         <Rank />
         <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/> 
-        <FaceRecognition imageUrl={this.state.imageUrl}/>   
+        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl}  />   
         
       </div>
     );
