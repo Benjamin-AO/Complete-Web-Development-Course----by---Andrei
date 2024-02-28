@@ -13,11 +13,10 @@ h1{
     font-family: 'Moria Citadel';
     font-size: 3em;
     border-bottom: 5px solid rgb(42, 46, 42);
-    border-right: 9px solid rgb(42, 46, 42);;
+    border-right: 9px solid rgb(42, 46, 42);
     color: rgb(61, 168, 61);
     width: 600px;
     text-align: center;
-
 }
 
 img{
