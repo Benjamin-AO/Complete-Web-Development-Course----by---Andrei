@@ -54,6 +54,20 @@ app.post('/register', (req, res) => {
     res.json(database.users[database.users.length-1]); // we are passing the index of the last database user object to json
 })
 
+app.get('/profile/:id', (req, res) => {
+    const { id } = req.params;
+    let found = false;
+    database.users.forEach(users => {
+        if (users.id == id) {
+            found = true;
+            return res.json(users);
+        } 
+    })
+    if (!found) {
+        res.status(404).json('no such user found');
+    }
+})
+
 app.listen(3000, () => {
     console.log('app is running on port 3000');
 })
