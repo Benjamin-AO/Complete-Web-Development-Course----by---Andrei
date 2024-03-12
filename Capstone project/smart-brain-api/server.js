@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcrypt-nodejs');
 
 const app = express();
 
@@ -8,7 +9,6 @@ const database = {
             id: '123',
             name: 'John',
             email: 'john@gmail.com',
-            password: "cookies",
             entries: 0,
             joined: new Date()
         },
@@ -16,9 +16,15 @@ const database = {
             id: '124',
             name: 'sally',
             email: 'sally@gmail.com',
-            password: 'bananas',
             entries: 0,
             joined: new Date()
+        }
+    ],
+    login: [
+        {
+            id: '987',
+            hash: '',
+            email: 'john@gmail.com'
         }
     ]
 }
@@ -32,6 +38,13 @@ app.get('/', (req, res) => {
 })
 
 app.post('/signin', (req,res) =>{
+    bcrypt.compare("apples", '$2a$10$yqyCAmBsgO4n33J8.W.7E.aFQpFs.BQutXj/6MZIP4vUqKmxS6xLS', function(err, res) {
+        console.log('first guess: ', res);
+    });
+    bcrypt.compare("vergies", '$2a$10$yqyCAmBsgO4n33J8.W.7E.aFQpFs.BQutXj/6MZIP4vUqKmxS6xLS', function(err, res) {
+        console.log('second guess: ', res);
+    });
+
     if (req.body.email === database.users[0].email && 
         req.body.password === database.users[0].password) {
         res.json('success');
@@ -61,6 +74,21 @@ app.get('/profile/:id', (req, res) => {
         if (users.id == id) {
             found = true;
             return res.json(users);
+        } 
+    })
+    if (!found) {
+        res.status(404).json('no such user found');
+    }
+})
+
+app.put('/image', (req, res) => {
+    const { id } = req.body;
+    let found = false;
+    database.users.forEach(users => {
+        if (users.id == id) {
+            found = true;
+            users.entries++
+            return res.json(users.entries);
         } 
     })
     if (!found) {
